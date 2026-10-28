@@ -38,6 +38,7 @@ static func choose_move(board: BoardModel, goals: LevelGoals) -> Dictionary:
 static func _score(res: Dictionary, goals: LevelGoals, wanted: Array) -> float:
 	var s := 0.0
 	var need_weeds := goals.needs("weeds")
+	var need_ice := goals.needs("ice")
 	var need_rockets := goals.needs("rockets")
 	var need_rainbow := goals.needs("rainbow")
 	if res.get("combo", false):
@@ -49,6 +50,8 @@ static func _score(res: Dictionary, goals: LevelGoals, wanted: Array) -> float:
 			s += 10.0 if wanted.has(c.color) else 1.0
 		for w in ph.weeds:
 			s += 14.0 if need_weeds else 1.0
+		for i in ph.get("ice", []):
+			s += 12.0 if need_ice else 0.5
 		s += ph.rockets_activated * (18.0 if need_rockets else 2.0)
 		for cr in ph.created:
 			match int(cr.special):
@@ -65,7 +68,7 @@ static func _score(res: Dictionary, goals: LevelGoals, wanted: Array) -> float:
 static func play_level(level: Dictionary, seed_value: int, max_moves_guard: int = 200) -> Dictionary:
 	seed(seed_value)
 	var board := BoardModel.new()
-	board.setup(level.colors, level.get("mask", []), level.get("weeds", []), seed_value)
+	board.setup(level.colors, level.get("mask", []), level.get("weeds", []), seed_value, level.get("ice", []))
 	var goals := LevelGoals.new()
 	goals.setup(level)
 	var guard := 0
@@ -83,4 +86,4 @@ static func play_level(level: Dictionary, seed_value: int, max_moves_guard: int 
 		goals.use_move()
 		goals.apply_result(res)
 	return {"won": goals.is_complete(), "stars": goals.stars(), "moves_left": goals.moves_left, "stats": goals.stats,
-		"weeds_left": board.weed_count()}
+		"weeds_left": board.weed_count(), "ice_left": board.ice_count()}

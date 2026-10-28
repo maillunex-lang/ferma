@@ -8,12 +8,30 @@ var levels: Array = []
 var color_defs: Array = []
 var current_level_id := 1
 var last_result: Dictionary = {}
+var _by_id := {}
+
+const CHAPTER_SIZE := 20
+const CHAPTERS := [
+	"Солнечная долина", "Медовый луг", "Тыквенная грядка", "Яблоневая роща", "Ягодная поляна",
+	"Мельничный холм", "Тихий пруд", "Подсолнуховое поле", "Грибной лес", "Ярмарка урожая",
+	"Клубничный берег", "Виноградная терраса", "Морковные холмы", "Пасека", "Ромашковый луг",
+	"Кукурузный лабиринт", "Черничный бор", "Вишнёвый сад", "Овечье пастбище", "Радужный ручей",
+	"Звёздная опушка", "Осенний сад", "Зимний огород", "Весенняя капель", "Большой фестиваль",
+]
 
 
 func _ready() -> void:
 	var d = JSON.parse_string(FileAccess.get_file_as_string("res://data/levels.json"))
 	levels = d.levels
 	color_defs = d.colors
+	# Levels 11..500 are produced by tools/generate_levels.gd (bot-verified).
+	var gen_path := "res://data/levels_generated.json"
+	if FileAccess.file_exists(gen_path):
+		var gen = JSON.parse_string(FileAccess.get_file_as_string(gen_path))
+		if typeof(gen) == TYPE_ARRAY:
+			levels.append_array(gen)
+	for l in levels:
+		_by_id[int(l.id)] = l
 
 
 func count() -> int:
@@ -21,10 +39,19 @@ func count() -> int:
 
 
 func get_level(id: int) -> Dictionary:
-	for l in levels:
-		if int(l.id) == id:
-			return l
-	return {}
+	return _by_id.get(id, {})
+
+
+func chapter_count() -> int:
+	return int(ceil(float(count()) / CHAPTER_SIZE))
+
+
+func chapter_of(id: int) -> int:
+	return (id - 1) / CHAPTER_SIZE
+
+
+func chapter_name(ch: int) -> String:
+	return CHAPTERS[clampi(ch, 0, CHAPTERS.size() - 1)]
 
 
 func _rec(id: int) -> Dictionary:

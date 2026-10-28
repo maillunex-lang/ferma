@@ -121,6 +121,8 @@ func _make_goal(i: int, compact := false) -> Control:
 				texs.append(LevelManager.color_texture(c))
 		"weeds":
 			texs.append(load("res://assets/tiles/weed.png"))
+		"ice":
+			texs.append(load("res://assets/tiles/ice_1.png"))
 		"rockets":
 			texs.append(load("res://assets/tiles/rocket.png"))
 		"rainbow":

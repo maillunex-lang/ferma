@@ -24,8 +24,39 @@ SHADOW = """
 """
 
 
+GLOSS = """
+<filter id="gloss" x="-10%" y="-10%" width="120%" height="120%">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="blur"/>
+  <feSpecularLighting in="blur" surfaceScale="6" specularConstant="0.75" specularExponent="24"
+      lighting-color="#ffffff" result="spec">
+    <fePointLight x="{lx}" y="{ly}" z="{lz}"/>
+  </feSpecularLighting>
+  <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
+  <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="inner"/>
+  <feComposite in="SourceAlpha" in2="inner" operator="arithmetic" k2="1" k3="-1" result="rim"/>
+  <feFlood flood-color="#ffffff" flood-opacity="0.2"/>
+  <feComposite in2="rim" operator="in" result="rimLight"/>
+  <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="rimLight"/></feMerge>
+  <feComposite in2="specIn" operator="arithmetic" k1="0" k2="1.05" k3="0.38" k4="-0.02" result="lit"/>
+  <feComposite in="lit" in2="SourceAlpha" operator="in"/>
+</filter>
+<filter id="ds2" x="-30%" y="-30%" width="160%" height="160%">
+  <feDropShadow dx="0" dy="{dy}" stdDeviation="{sd}" flood-color="#2a1a40" flood-opacity="0.28"/>
+</filter>
+"""
+
+SOFT_PREFIXES = ("tile_", "special_")
+
+
 def save(name, w, h, body, out, defs="", shadow=(6, 5), blur=6):
     sd = SHADOW.format(dy=shadow[0], sd=shadow[1], blur=blur)
+    if name.startswith(SOFT_PREFIXES):
+        # Soft candy look: thinner outlines, specular gloss + rim light, softer shadow.
+        import re
+        body = body.replace('filter="url(#ds)"', '')
+        body = re.sub(r'stroke-width="(\d+(?:\.\d+)?)"', lambda m: 'stroke-width="%.1f"' % (float(m.group(1)) * 0.72), body)
+        sd += GLOSS.format(lx=w * 0.3, ly=h * 0.15, lz=w * 0.7, dy=w / 40, sd=w / 32)
+        body = f'<g filter="url(#ds2)"><g filter="url(#gloss)">{body}</g></g>'
     svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" '
            f'viewBox="0 0 {w} {h}" data-out="{out}"><defs>{sd}{defs}</defs>{body}</svg>')
     with open(os.path.join(OUT, name + ".svg"), "w") as f:
@@ -355,4 +386,6 @@ if __name__ == "__main__":
             fn()
     import farm_art  # noqa: E402  (second half of the art set)
     farm_art.generate(save, globals())
+    import fx_art  # noqa: E402
+    fx_art.generate(save, globals())
     print("svgs written to", OUT)

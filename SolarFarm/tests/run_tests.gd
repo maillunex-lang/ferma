@@ -26,7 +26,11 @@ func _run() -> void:
 		var suite_name: String = path.get_file().get_basename()
 		if not only.is_empty() and not only.has(suite_name):
 			continue
-		var suite: TestCase = load(path).new()
+		var script: GDScript = load(path)
+		if script == null or not script.can_instantiate():
+			all_failures.append("%s: script failed to load" % suite_name)
+			continue
+		var suite: TestCase = script.new()
 		suite.tree = self
 		var methods := []
 		for m in suite.get_method_list():
@@ -35,6 +39,8 @@ func _run() -> void:
 		var t := Time.get_ticks_msec()
 		for m in methods:
 			suite.current = "%s.%s" % [suite_name, m]
+			if OS.has_environment("TEST_VERBOSE"):
+				print("  > ", suite.current)
 			await suite.call(m)
 		total_checks += suite.checks
 		all_failures.append_array(suite.failures)

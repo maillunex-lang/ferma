@@ -6,6 +6,11 @@ const STEP_Y := 210.0
 
 var _map: Control
 var _current_node: Control
+var _chapter := 0
+var _chapter_title: Label
+var _chapter_info: Label
+var _prev_btn: Button
+var _next_btn: Button
 
 
 func _init() -> void:
@@ -16,7 +21,44 @@ func _init() -> void:
 
 func build() -> void:
 	AudioManager.play_music("menu")
-	var n := LevelManager.count()
+	_chapter = LevelManager.chapter_of(LevelManager.next_level_id())
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 10)
+	content.get_parent().get_parent().add_child(head)
+	content.get_parent().get_parent().move_child(head, 1)
+	_prev_btn = UIKit.round_button(load("res://assets/ui/icon_back.png"), UIKit.C_SKY, 80)
+	_prev_btn.pressed.connect(func(): _show_chapter(_chapter - 1))
+	head.add_child(_prev_btn)
+	var mid := VBoxContainer.new()
+	mid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	mid.add_theme_constant_override("separation", -6)
+	head.add_child(mid)
+	_chapter_title = UIKit.title_label("", 36, UIKit.C_GREEN_DARK)
+	mid.add_child(_chapter_title)
+	_chapter_info = UIKit.label("", 22, Color.WHITE, 6, Color(0.25, 0.15, 0.05, 0.8))
+	_chapter_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	mid.add_child(_chapter_info)
+	_next_btn = UIKit.round_button(load("res://assets/ui/icon_play.png"), UIKit.C_SKY, 80)
+	_next_btn.pressed.connect(func(): _show_chapter(_chapter + 1))
+	head.add_child(_next_btn)
+	_show_chapter(_chapter)
+
+
+func _show_chapter(ch: int) -> void:
+	_chapter = clampi(ch, 0, LevelManager.chapter_count() - 1)
+	_prev_btn.disabled = _chapter == 0
+	_next_btn.disabled = _chapter >= LevelManager.chapter_count() - 1
+	var first := _chapter * LevelManager.CHAPTER_SIZE + 1
+	var last := mini(first + LevelManager.CHAPTER_SIZE - 1, LevelManager.count())
+	_chapter_title.text = "Глава %d. %s" % [_chapter + 1, LevelManager.chapter_name(_chapter)]
+	var stars := 0
+	for id in range(first, last + 1):
+		stars += LevelManager.stars(id)
+	_chapter_info.text = "Уровни %d–%d  •  звёзд %d из %d" % [first, last, stars, (last - first + 1) * 3]
+	if _map:
+		_map.queue_free()
+	_current_node = null
+	var n := last - first + 1
 	_map = Control.new()
 	_map.custom_minimum_size = Vector2(640, STEP_Y * n + 80)
 	_map.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -35,23 +77,20 @@ func build() -> void:
 	border.end_cap_mode = Line2D.LINE_CAP_ROUND
 	_map.add_child(border)
 	_map.add_child(path)
-	var pts := PackedVector2Array()
-	for i in n:
-		pts.append(_node_pos(i))
 	var curve := Curve2D.new()
-	for i in pts.size():
-		var p := pts[i]
-		var tangent := Vector2(0, STEP_Y * 0.45)
-		curve.add_point(p, -tangent, tangent)
-	var baked := curve.get_baked_points()
-	path.points = baked
-	border.points = baked
 	for i in n:
-		_map.add_child(_make_node(i))
+		var tangent := Vector2(0, STEP_Y * 0.45)
+		curve.add_point(_node_pos(i), -tangent, tangent)
+	path.points = curve.get_baked_points()
+	border.points = path.points
+	for i in n:
+		_map.add_child(_make_node(i, first + i))
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if _current_node:
 		scroll.scroll_vertical = int(maxf(0.0, _current_node.position.y - scroll.size.y * 0.4))
+	else:
+		scroll.scroll_vertical = 0
 
 
 func _node_pos(i: int) -> Vector2:
@@ -59,15 +98,16 @@ func _node_pos(i: int) -> Vector2:
 	return Vector2(x, 100 + i * STEP_Y)
 
 
-func _make_node(i: int) -> Control:
-	var lv: Dictionary = LevelManager.levels[i]
-	var id := int(lv.id)
+func _make_node(i: int, id: int) -> Control:
+	var lv: Dictionary = LevelManager.get_level(id)
 	var unlocked := LevelManager.is_unlocked(id)
 	var completed := LevelManager.is_completed(id)
 	var holder := Control.new()
 	holder.position = _node_pos(i) - Vector2(NODE_D, NODE_D) / 2
 	holder.size = Vector2(NODE_D, NODE_D + 50)
 	var color := UIKit.C_GREEN if completed else (UIKit.C_ORANGE if unlocked else UIKit.C_GREY)
+	if lv.get("hard", false) and unlocked and not completed:
+		color = UIKit.C_CORAL
 	var b := UIKit.button(str(id) if unlocked else "", color, Vector2(NODE_D, NODE_D), 56)
 	for k in ["normal", "hover", "pressed", "disabled"]:
 		(b.get_theme_stylebox(k) as StyleBoxFlat).set_corner_radius_all(int(NODE_D / 2))
@@ -78,7 +118,8 @@ func _make_node(i: int) -> Control:
 		b.add_theme_constant_override("icon_max_width", 60)
 	b.pressed.connect(func(): _open_level(id))
 	holder.add_child(b)
-	var name_l := UIKit.label(lv.name, 24, Color.WHITE, 8, Color(0.25, 0.15, 0.05, 0.85))
+	var name_l := UIKit.label(("Сложный!" if lv.get("hard", false) else "") if id > 10 else lv.name, 24,
+		Color("ffd0c8") if lv.get("hard", false) else Color.WHITE, 8, Color(0.25, 0.15, 0.05, 0.85))
 	name_l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_l.position = Vector2(-80, NODE_D + 34)
 	name_l.size = Vector2(NODE_D + 160, 30)
@@ -119,6 +160,8 @@ func _open_level(id: int) -> void:
 				tex = LevelManager.color_defs[int(g.colors[0])].texture
 			"weeds":
 				tex = "res://assets/tiles/weed.png"
+			"ice":
+				tex = "res://assets/tiles/ice_1.png"
 			"rockets":
 				tex = "res://assets/tiles/rocket.png"
 			"rainbow":

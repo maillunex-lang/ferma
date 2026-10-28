@@ -82,14 +82,38 @@ func test_no_network_code() -> void:
 
 func test_level_data_matches_spec() -> void:
 	var levels: Array = JSON.parse_string(FileAccess.get_file_as_string("res://data/levels.json")).levels
-	eq(levels.size(), 10, "ten levels")
+	eq(levels.size(), 10, "ten hand-made levels")
 	var moves := [20, 22, 23, 22, 25, 25, 26, 28, 28, 32]
 	var coins := [100, 120, 140, 160, 180, 200, 220, 250, 280, 500]
 	for i in 10:
 		eq(int(levels[i].moves), moves[i], "level %d moves" % (i + 1))
 		eq(int(levels[i].reward.coins), coins[i], "level %d coins" % (i + 1))
-		var weed_goal := 0
-		for g in levels[i].goals:
+
+
+func test_all_500_levels_valid() -> void:
+	var lm := autoload("LevelManager")
+	eq(lm.count(), 500, "500 levels in total")
+	var shapes := {}
+	for id in range(1, 501):
+		var lv: Dictionary = lm.get_level(id)
+		check(not lv.is_empty(), "level %d exists" % id)
+		if lv.is_empty():
+			continue
+		check(int(lv.moves) >= 12 and int(lv.moves) <= 50, "level %d moves in range (%d)" % [id, int(lv.moves)])
+		check(lv.goals.size() >= 1 and lv.goals.size() <= 6, "level %d has goals" % id)
+		check(lv.colors.size() >= 4, "level %d colours" % id)
+		check(int(lv.stars.three) > int(lv.stars.two), "level %d star thresholds" % id)
+		var active: int = 64 - lv.mask.size()
+		check(active >= 40, "level %d playable area (%d)" % [id, active])
+		shapes[str(lv.mask)] = true
+		var masked := {}
+		for c in lv.mask:
+			masked[Vector2i(c[0], c[1])] = true
+		for c in lv.weeds + lv.get("ice", []):
+			check(not masked.has(Vector2i(c[0], c[1])), "level %d obstacle on a hole" % id)
+		for g in lv.goals:
 			if g.type == "weeds":
-				weed_goal = int(g.target)
-		eq(levels[i].weeds.size(), weed_goal, "level %d: weeds on board == weed goal" % (i + 1))
+				eq(int(g.target), lv.weeds.size(), "level %d weed goal" % id)
+			if g.type == "ice":
+				eq(int(g.target), lv.get("ice", []).size(), "level %d ice goal" % id)
+	check(shapes.size() >= 15, "many different board shapes (%d)" % shapes.size())

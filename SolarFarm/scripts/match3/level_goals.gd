@@ -12,7 +12,7 @@ var moves_left := 0
 var helpers_used := 0
 var stats := {
 	"specials_created": 0, "rockets_created": 0, "baskets_created": 0, "rainbows_created": 0,
-	"rockets_activated": 0, "max_cascade": 0, "booster_combos": 0, "matches": 0, "weeds_cleared": 0,
+	"rockets_activated": 0, "max_cascade": 0, "booster_combos": 0, "matches": 0, "weeds_cleared": 0, "ice_cleared": 0,
 }
 
 
@@ -74,6 +74,9 @@ func apply_phase(ph: Dictionary) -> void:
 	for w in ph.get("weeds", []):
 		if w.hp <= 0:
 			stats.weeds_cleared += 1
+	for i in ph.get("ice", []):
+		if i.hp <= 0:
+			stats.ice_cleared += 1
 	for cr in ph.get("created", []):
 		stats.specials_created += 1
 		match int(cr.special):
@@ -87,6 +90,8 @@ func apply_phase(ph: Dictionary) -> void:
 		match g.type:
 			"weeds":
 				g.current = stats.weeds_cleared
+			"ice":
+				g.current = stats.ice_cleared
 			"rockets":
 				g.current = stats.rockets_activated
 			"rainbow":

@@ -18,6 +18,7 @@ enum Special { NONE, ROCKET_H, ROCKET_V, BASKET, RAINBOW }
 var grid: Array = []    # grid[x][y] -> piece Dictionary {id, color, special} or null
 var active: Array = []  # active[x][y] -> bool, false for holes in shaped boards
 var weeds: Array = []   # weeds[x][y] -> remaining hit points of a weed blocker
+var ice: Array = []     # ice[x][y] -> ice layer under the piece (melts when the piece is cleared)
 var colors: Array = [0, 1, 2, 3, 4, 5]
 var rng := RandomNumberGenerator.new()
 
@@ -25,7 +26,7 @@ var _next_id := 1
 var _cascade := 0
 
 
-func setup(level_colors: Array, mask: Array = [], weed_cells: Array = [], seed_value: int = -1) -> void:
+func setup(level_colors: Array, mask: Array = [], weed_cells: Array = [], seed_value: int = -1, ice_cells: Array = []) -> void:
 	colors.clear()
 	for c in level_colors:
 		colors.append(int(c))
@@ -36,18 +37,23 @@ func setup(level_colors: Array, mask: Array = [], weed_cells: Array = [], seed_v
 	grid.clear()
 	active.clear()
 	weeds.clear()
+	ice.clear()
 	for x in W:
 		grid.append([])
 		active.append([])
 		weeds.append([])
+		ice.append([])
 		for y in H:
 			grid[x].append(null)
 			active[x].append(true)
 			weeds[x].append(0)
+			ice[x].append(0)
 	for c in mask:
 		active[int(c[0])][int(c[1])] = false
 	for c in weed_cells:
 		weeds[int(c[0])][int(c[1])] = int(c[2]) if c.size() > 2 else 1
+	for c in ice_cells:
+		ice[int(c[0])][int(c[1])] = int(c[2]) if c.size() > 2 else 1
 	fill_initial()
 
 
@@ -66,6 +72,7 @@ func clone() -> BoardModel:
 	b.grid = grid.duplicate(true)
 	b.active = active.duplicate(true)
 	b.weeds = weeds.duplicate(true)
+	b.ice = ice.duplicate(true)
 	b.colors = colors.duplicate()
 	b.rng.seed = rng.seed
 	b.rng.state = rng.state
@@ -101,6 +108,15 @@ func weed_count() -> int:
 	for x in W:
 		for y in H:
 			if weeds[x][y] > 0:
+				n += 1
+	return n
+
+
+func ice_count() -> int:
+	var n := 0
+	for x in W:
+		for y in H:
+			if ice[x][y] > 0:
 				n += 1
 	return n
 
@@ -411,7 +427,7 @@ func _cascades(first: Dictionary) -> Array:
 
 func _execute(seed_cells: Array, groups: Array, forced: Array, preferred: Array, seed_hits_weeds: bool = true) -> Dictionary:
 	var phase := {
-		"cascade": _cascade, "cleared": [], "weeds": [], "effects": [], "created": [], "converted": [],
+		"cascade": _cascade, "cleared": [], "weeds": [], "ice": [], "effects": [], "created": [], "converted": [],
 		"moves": [], "spawns": [], "groups": groups.size(), "rockets_activated": 0,
 	}
 	var to_clear := {}
@@ -473,6 +489,9 @@ func _execute(seed_cells: Array, groups: Array, forced: Array, preferred: Array,
 		var p = grid[c.x][c.y]
 		if p == null:
 			continue
+		if ice[c.x][c.y] > 0:
+			ice[c.x][c.y] -= 1
+			phase.ice.append({"pos": c, "hp": ice[c.x][c.y]})
 		phase.cleared.append({"id": p.id, "pos": c, "color": p.color, "special": p.special})
 		grid[c.x][c.y] = null
 	for cr in creations:
@@ -746,14 +765,17 @@ func load_layout(rows: Array, level_colors: Array = [0, 1, 2, 3, 4, 5], seed_val
 	grid.clear()
 	active.clear()
 	weeds.clear()
+	ice.clear()
 	for x in W:
 		grid.append([])
 		active.append([])
 		weeds.append([])
+		ice.append([])
 		for y in H:
 			grid[x].append(null)
 			active[x].append(true)
 			weeds[x].append(0)
+			ice[x].append(0)
 	for y in H:
 		var row: String = rows[y]
 		for x in W:

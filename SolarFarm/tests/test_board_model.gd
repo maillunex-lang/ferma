@@ -292,3 +292,56 @@ func test_masked_board() -> void:
 		var m: Array = moves[0]
 		b.try_swap(m[0], m[1])
 		eq(b.piece_count(), 60, "holes never get pieces")
+
+
+func test_ice_melts_when_piece_cleared() -> void:
+	var b := board_with({Vector2i(0, 3): 1, Vector2i(2, 4): 1})
+	b.ice[1][3] = 1
+	b.ice[0][3] = 2
+	b.ice[5][5] = 1
+	eq(b.ice_count(), 3, "three ice cells")
+	var res := b.try_swap(Vector2i(2, 3), Vector2i(2, 4))
+	check(res.valid, "valid")
+	eq(b.ice[1][3], 0, "single ice melted by the match on it")
+	eq(b.ice[0][3], 1, "thick ice needs two hits")
+	eq(b.ice[5][5], 1, "ice elsewhere untouched")
+	var melted := 0
+	for i in res.phases[0].ice:
+		if i.hp <= 0:
+			melted += 1
+	eq(melted, 1, "phase reports melted ice")
+	eq(b.piece_count(), 64, "pieces still fall onto ice cells")
+
+
+func test_ice_goal_counting() -> void:
+	var lv := {"id": 97, "moves": 10, "goals": [{"type": "ice", "target": 2}],
+		"stars": {"two": 1, "three": 2, "extra": {"type": "no_helpers", "target": 0, "text": ""}}}
+	var g := LevelGoals.new()
+	g.setup(lv)
+	g.apply_result({"phases": [{"cascade": 0, "cleared": [], "weeds": [], "ice": [{"pos": Vector2i(0, 0), "hp": 0}, {"pos": Vector2i(1, 0), "hp": 1}],
+		"effects": [], "created": [], "converted": [], "moves": [], "spawns": [], "groups": 0, "rockets_activated": 0}]})
+	eq(g.goal_remaining(0), 1, "only fully melted ice counts")
+
+
+func test_shaped_boards_stay_consistent() -> void:
+	var shapes := [
+		[[0, 0], [1, 0], [0, 1], [1, 1], [6, 0], [7, 0], [6, 1], [7, 1], [0, 6], [1, 6], [0, 7], [1, 7], [6, 6], [7, 6], [6, 7], [7, 7]],
+		[[3, 3], [4, 3], [3, 4], [4, 4]],
+		[[0, 3], [1, 3], [6, 3], [7, 3], [0, 4], [1, 4], [6, 4], [7, 4]],
+	]
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 5
+	for shape in shapes:
+		var b := BoardModel.new()
+		b.setup([0, 1, 2, 3, 4, 5], shape, [], 3, [[2, 2], [5, 5, 2]])
+		var playable: int = 64 - shape.size()
+		eq(b.piece_count(), playable, "shape filled")
+		for i in 25:
+			var moves := b.find_possible_moves()
+			check(not moves.is_empty(), "moves exist on shaped board")
+			if moves.is_empty():
+				break
+			var m: Array = moves[rng.randi() % moves.size()]
+			b.try_swap(m[0], m[1])
+			eq(b.piece_count(), playable, "holes never filled, cells never empty")
+			check(b.find_matches().is_empty(), "no pending matches")

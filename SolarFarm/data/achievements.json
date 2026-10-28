@@ -1,14 +1,223 @@
 {
   "tasks": [
-    {"id": "first_match", "title": "Первое совпадение", "text": "Собери три одинаковых элемента в ряд", "event": "match", "target": 1, "reward": {"helpers": {"rooster": 1}}},
-    {"id": "first_level", "title": "Первый урожай", "text": "Пройди первый уровень", "event": "level_won", "target": 1, "reward": {"coins": 50}},
-    {"id": "first_rocket", "title": "Ракетчик", "text": "Создай ракету из четырёх элементов", "event": "rocket_created", "target": 1, "reward": {"helpers": {"squirrel": 1}}},
-    {"id": "first_upgrade", "title": "Хозяин фермы", "text": "Улучши любую постройку на ферме", "event": "farm_upgrade", "target": 1, "reward": {"helpers": {"bee": 1}}},
-    {"id": "use_helper", "title": "Дружная команда", "text": "Используй любого помощника в головоломке", "event": "helper_used", "target": 1, "reward": {"helpers": {"hedgehog": 1}}},
-    {"id": "first_basket", "title": "Полная корзина", "text": "Создай корзину совпадением буквой Т или Г", "event": "basket_created", "target": 1, "reward": {"coins": 80}},
-    {"id": "first_rainbow", "title": "Радуга", "text": "Создай радужную ягоду из пяти элементов", "event": "rainbow_created", "target": 1, "reward": {"helpers": {"rooster": 1, "hedgehog": 1}}},
-    {"id": "stars_10", "title": "Звездочёт", "text": "Собери 10 звёзд на уровнях", "event": "stars_total", "target": 10, "reward": {"helpers": {"squirrel": 1, "bee": 1}}},
-    {"id": "farm_5", "title": "Золотые руки", "text": "Сделай 5 улучшений фермы", "event": "farm_upgrade", "target": 5, "reward": {"coins": 150}},
-    {"id": "all_levels", "title": "Фестиваль урожая", "text": "Пройди все 10 уровней", "event": "levels_completed", "target": 10, "reward": {"helpers": {"rooster": 1, "squirrel": 1, "hedgehog": 1, "bee": 1}}}
+    {
+      "id": "first_match",
+      "title": "Первое совпадение",
+      "text": "Собери три одинаковых элемента в ряд",
+      "event": "match",
+      "target": 1,
+      "reward": {
+        "helpers": {
+          "rooster": 1
+        }
+      }
+    },
+    {
+      "id": "first_level",
+      "title": "Первый урожай",
+      "text": "Пройди первый уровень",
+      "event": "level_won",
+      "target": 1,
+      "reward": {
+        "coins": 50
+      }
+    },
+    {
+      "id": "first_rocket",
+      "title": "Ракетчик",
+      "text": "Создай ракету из четырёх элементов",
+      "event": "rocket_created",
+      "target": 1,
+      "reward": {
+        "helpers": {
+          "squirrel": 1
+        }
+      }
+    },
+    {
+      "id": "first_upgrade",
+      "title": "Хозяин фермы",
+      "text": "Улучши любую постройку на ферме",
+      "event": "farm_upgrade",
+      "target": 1,
+      "reward": {
+        "helpers": {
+          "bee": 1
+        }
+      }
+    },
+    {
+      "id": "use_helper",
+      "title": "Дружная команда",
+      "text": "Используй любого помощника в головоломке",
+      "event": "helper_used",
+      "target": 1,
+      "reward": {
+        "helpers": {
+          "hedgehog": 1
+        }
+      }
+    },
+    {
+      "id": "first_basket",
+      "title": "Полная корзина",
+      "text": "Создай корзину совпадением буквой Т или Г",
+      "event": "basket_created",
+      "target": 1,
+      "reward": {
+        "coins": 80
+      }
+    },
+    {
+      "id": "first_rainbow",
+      "title": "Радуга",
+      "text": "Создай радужную ягоду из пяти элементов",
+      "event": "rainbow_created",
+      "target": 1,
+      "reward": {
+        "helpers": {
+          "rooster": 1,
+          "hedgehog": 1
+        }
+      }
+    },
+    {
+      "id": "stars_10",
+      "title": "Звездочёт",
+      "text": "Собери 10 звёзд на уровнях",
+      "event": "stars_total",
+      "target": 10,
+      "reward": {
+        "helpers": {
+          "squirrel": 1,
+          "bee": 1
+        }
+      }
+    },
+    {
+      "id": "farm_5",
+      "title": "Золотые руки",
+      "text": "Сделай 5 улучшений фермы",
+      "event": "farm_upgrade",
+      "target": 5,
+      "reward": {
+        "coins": 150
+      }
+    },
+    {
+      "id": "all_levels",
+      "title": "Фестиваль урожая",
+      "text": "Пройди первые 10 уровней",
+      "event": "levels_completed",
+      "target": 10,
+      "reward": {
+        "helpers": {
+          "rooster": 1,
+          "squirrel": 1,
+          "hedgehog": 1,
+          "bee": 1
+        }
+      }
+    },
+    {
+      "id": "levels_50",
+      "title": "Опытный фермер",
+      "text": "Пройди 50 уровней",
+      "event": "levels_completed",
+      "target": 50,
+      "reward": {
+        "coins": 300,
+        "helpers": {
+          "rooster": 1,
+          "bee": 1
+        }
+      }
+    },
+    {
+      "id": "levels_100",
+      "title": "Мастер урожая",
+      "text": "Пройди 100 уровней",
+      "event": "levels_completed",
+      "target": 100,
+      "reward": {
+        "coins": 500,
+        "helpers": {
+          "rooster": 2,
+          "squirrel": 2,
+          "hedgehog": 2,
+          "bee": 2
+        }
+      }
+    },
+    {
+      "id": "levels_250",
+      "title": "Легенда долины",
+      "text": "Пройди 250 уровней",
+      "event": "levels_completed",
+      "target": 250,
+      "reward": {
+        "coins": 1000,
+        "helpers": {
+          "rooster": 3,
+          "squirrel": 3,
+          "hedgehog": 3,
+          "bee": 3
+        }
+      }
+    },
+    {
+      "id": "levels_500",
+      "title": "Большой фестиваль",
+      "text": "Пройди все 500 уровней",
+      "event": "levels_completed",
+      "target": 500,
+      "reward": {
+        "coins": 3000,
+        "helpers": {
+          "rooster": 5,
+          "squirrel": 5,
+          "hedgehog": 5,
+          "bee": 5
+        }
+      }
+    },
+    {
+      "id": "stars_100",
+      "title": "Звёздное небо",
+      "text": "Собери 100 звёзд",
+      "event": "stars_total",
+      "target": 100,
+      "reward": {
+        "helpers": {
+          "hedgehog": 2,
+          "squirrel": 1
+        }
+      }
+    },
+    {
+      "id": "stars_500",
+      "title": "Созвездие",
+      "text": "Собери 500 звёзд",
+      "event": "stars_total",
+      "target": 500,
+      "reward": {
+        "coins": 800,
+        "helpers": {
+          "bee": 3
+        }
+      }
+    },
+    {
+      "id": "first_ice",
+      "title": "Оттепель",
+      "text": "Растопи 20 льдинок",
+      "event": "ice_cleared",
+      "target": 20,
+      "reward": {
+        "helpers": {
+          "hedgehog": 1
+        }
+      }
+    }
   ]
 }

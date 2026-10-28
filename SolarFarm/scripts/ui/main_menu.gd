@@ -25,7 +25,7 @@ func _ready() -> void:
 
 	var top := HBoxContainer.new()
 	root.add_child(top)
-	var stars_pill := UIKit.counter_pill(load("res://assets/ui/star.png"), "%d/30" % LevelManager.total_stars())
+	var stars_pill := UIKit.counter_pill(load("res://assets/ui/star.png"), str(LevelManager.total_stars()))
 	top.add_child(stars_pill)
 	var sp := Control.new()
 	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -78,18 +78,19 @@ func _ready() -> void:
 	var pl := UIKit.label("Пройдено уровней: %d из %d" % [done, LevelManager.count()], 28)
 	pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pv.add_child(pl)
-	var dots := HBoxContainer.new()
-	dots.alignment = BoxContainer.ALIGNMENT_CENTER
-	dots.add_theme_constant_override("separation", 6)
-	pv.add_child(dots)
-	for lv in LevelManager.levels:
-		var id := int(lv.id)
-		var tex := "res://assets/ui/star.png" if LevelManager.is_completed(id) else "res://assets/ui/star_empty.png"
-		var d := UIKit.icon(load(tex), 50)
-		if id == LevelManager.next_level_id() and not LevelManager.is_completed(id):
-			d.pivot_offset = Vector2(25, 25)
-			UIKit.pulse(d, 0.2, 0.8)
-		dots.add_child(d)
+	var bar := ProgressBar.new()
+	bar.max_value = LevelManager.count()
+	bar.value = done
+	bar.show_percentage = false
+	bar.custom_minimum_size = Vector2(0, 30)
+	bar.add_theme_stylebox_override("background", UIKit.style(UIKit.C_CREAM_DARK, 15, 0, Color.TRANSPARENT, 0))
+	bar.add_theme_stylebox_override("fill", UIKit.style(UIKit.C_GREEN, 15, 0, Color.TRANSPARENT, 0))
+	pv.add_child(bar)
+	var next_id := LevelManager.next_level_id()
+	var ch := LevelManager.chapter_of(next_id)
+	var cl := UIKit.label("Глава %d «%s» • следующий уровень %d" % [ch + 1, LevelManager.chapter_name(ch), next_id], 22, UIKit.C_TEXT.lightened(0.2))
+	cl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pv.add_child(cl)
 
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL

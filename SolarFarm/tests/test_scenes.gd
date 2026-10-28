@@ -10,7 +10,7 @@ func _wait(frames: int) -> void:
 
 func _goto(name: String) -> Node:
 	autoload("GameManager").goto(name)
-	await _wait(25)
+	await _wait(90 if name == "puzzle" else 25)
 	return tree.current_scene
 
 

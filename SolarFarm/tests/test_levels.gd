@@ -5,7 +5,13 @@ const GAMES := 8
 
 
 func test_every_level_is_winnable_without_helpers() -> void:
-	var levels: Array = autoload("LevelManager").levels
+	var lm := autoload("LevelManager")
+	var levels: Array = []
+	for id in range(1, 11):
+		levels.append(lm.get_level(id))
+	# A spread of generated levels (each one was already bot-verified by the generator).
+	for id in [11, 37, 60, 99, 150, 213, 280, 333, 400, 451, 500]:
+		levels.append(lm.get_level(id))
 	for level in levels:
 		var wins := 0
 		var best_stars := 0
@@ -16,7 +22,8 @@ func test_every_level_is_winnable_without_helpers() -> void:
 				best_stars = maxi(best_stars, r.stars)
 		print("    level %d: bot wins %d/%d, best stars %d" % [level.id, wins, GAMES, best_stars])
 		check(wins >= GAMES / 2, "level %d must be winnable without helpers (wins %d/%d)" % [level.id, wins, GAMES])
-		check(best_stars == 3 or int(level.id) >= 9, "level %d: three stars reachable (best %d)" % [level.id, best_stars])
+		if int(level.id) <= 10:
+			check(best_stars == 3 or int(level.id) >= 9, "level %d: three stars reachable (best %d)" % [level.id, best_stars])
 
 
 func test_progression_and_rewards() -> void:
