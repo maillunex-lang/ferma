@@ -1,0 +1,458 @@
+{
+  "colors": [
+    {
+      "id": 0,
+      "key": "red",
+      "name": "Клубника",
+      "goal_name": "клубники",
+      "texture": "res://assets/tiles/red.png",
+      "tint": "#ff4d6d"
+    },
+    {
+      "id": 1,
+      "key": "green",
+      "name": "Яблоко",
+      "goal_name": "яблок",
+      "texture": "res://assets/tiles/green.png",
+      "tint": "#7ed957"
+    },
+    {
+      "id": 2,
+      "key": "yellow",
+      "name": "Кукуруза",
+      "goal_name": "кукурузы",
+      "texture": "res://assets/tiles/yellow.png",
+      "tint": "#ffd23f"
+    },
+    {
+      "id": 3,
+      "key": "orange",
+      "name": "Морковь",
+      "goal_name": "морковок",
+      "texture": "res://assets/tiles/orange.png",
+      "tint": "#ff9f1c"
+    },
+    {
+      "id": 4,
+      "key": "blue",
+      "name": "Черника",
+      "goal_name": "черники",
+      "texture": "res://assets/tiles/blue.png",
+      "tint": "#4c8fff"
+    },
+    {
+      "id": 5,
+      "key": "purple",
+      "name": "Виноград",
+      "goal_name": "винограда",
+      "texture": "res://assets/tiles/purple.png",
+      "tint": "#b45cff"
+    }
+  ],
+  "levels": [
+    {
+      "id": 1,
+      "name": "Первый урожай",
+      "moves": 20,
+      "colors": [0, 1, 2, 3, 4],
+      "goals": [
+        {
+          "type": "collect",
+          "colors": [0],
+          "target": 15
+        }
+      ],
+      "stars": {
+        "two": 5,
+        "three": 8,
+        "extra": {
+          "type": "no_helpers",
+          "target": 0,
+          "text": "Пройти без помощников"
+        }
+      },
+      "reward": {
+        "coins": 100,
+        "helpers": {
+
+        },
+        "three_star": {
+          "rooster": 1
+        }
+      },
+      "tip": "Проведи пальцем по ягоде, чтобы поменять её с соседней. Собери три одинаковых в ряд!",
+      "mask": [],
+      "weeds": []
+    },
+    {
+      "id": 2,
+      "name": "Морковная грядка",
+      "moves": 22,
+      "colors": [0, 1, 2, 3, 4, 5],
+      "goals": [
+        {
+          "type": "collect",
+          "colors": [3],
+          "target": 18
+        }
+      ],
+      "stars": {
+        "two": 5,
+        "three": 9,
+        "extra": {
+          "type": "specials_created",
+          "target": 1,
+          "text": "Создать любой усилитель"
+        }
+      },
+      "reward": {
+        "coins": 120,
+        "helpers": {
+
+        },
+        "three_star": {
+          "squirrel": 1
+        }
+      },
+      "tip": "На поле много разных плодов. Ищи морковки и собирай их в ряды!",
+      "mask": [],
+      "weeds": []
+    },
+    {
+      "id": 3,
+      "name": "Яблочный сад",
+      "moves": 23,
+      "colors": [0, 1, 2, 3, 4, 5],
+      "goals": [
+        {
+          "type": "collect",
+          "colors": [1],
+          "target": 20
+        }
+      ],
+      "stars": {
+        "two": 6,
+        "three": 9,
+        "extra": {
+          "type": "cascade",
+          "target": 3,
+          "text": "Цепочка из 3 волн за один ход"
+        }
+      },
+      "reward": {
+        "coins": 140,
+        "helpers": {
+          "rooster": 1
+        },
+        "three_star": {
+          "bee": 1
+        }
+      },
+      "tip": "Начинай ходы снизу поля: падающие плоды создают цепные реакции!",
+      "mask": [],
+      "weeds": []
+    },
+    {
+      "id": 4,
+      "name": "Кукурузное поле",
+      "moves": 22,
+      "colors": [0, 1, 2, 3, 4, 5],
+      "goals": [
+        {
+          "type": "collect",
+          "colors": [2],
+          "target": 20
+        }
+      ],
+      "stars": {
+        "two": 5,
+        "three": 8,
+        "extra": {
+          "type": "rockets_created",
+          "target": 2,
+          "text": "Создать 2 ракеты"
+        }
+      },
+      "reward": {
+        "coins": 160,
+        "helpers": {
+
+        },
+        "three_star": {
+          "hedgehog": 1
+        }
+      },
+      "tip": "Собери 4 в линию — получишь ракету! Коснись ракеты, чтобы запустить её.",
+      "mask": [[0, 0], [7, 0], [0, 7], [7, 7]],
+      "weeds": []
+    },
+    {
+      "id": 5,
+      "name": "Ягодный переполох",
+      "moves": 25,
+      "colors": [0, 1, 2, 3, 4, 5],
+      "goals": [
+        {
+          "type": "collect",
+          "colors": [0],
+          "target": 15
+        },
+        {
+          "type": "collect",
+          "colors": [4],
+          "target": 15
+        }
+      ],
+      "stars": {
+        "two": 6,
+        "three": 10,
+        "extra": {
+          "type": "no_helpers",
+          "target": 0,
+          "text": "Пройти без помощников"
+        }
+      },
+      "reward": {
+        "coins": 180,
+        "helpers": {
+          "squirrel": 1
+        },
+        "three_star": {
+          "rooster": 1
+        }
+      },
+      "tip": "Теперь целей две. Следи за обеими: клубникой и черникой!",
+      "mask": [],
+      "weeds": []
+    },
+    {
+      "id": 6,
+      "name": "Фруктовый фейерверк",
+      "moves": 25,
+      "colors": [0, 1, 2, 3, 4, 5],
+      "goals": [
+        {
+          "type": "rockets",
+          "colors": [],
+          "target": 3
+        },
+        {
+          "type": "collect",
+          "colors": [5],
+          "target": 15
+        }
+      ],
+      "stars": {
+        "two": 6,
+        "three": 10,
+        "extra": {
+          "type": "baskets_created",
+          "target": 1,
+          "text": "Создать корзину (Т или Г)"
+        }
+      },
+      "reward": {
+        "coins": 200,
+        "helpers": {
+
+        },
+        "three_star": {
+          "squirrel": 1
+        }
+      },
+      "tip": "Совпадение буквой Т или Г даёт корзину, а пять в ряд — радужную ягоду. Поменяй два усилителя местами для суперэффекта!",
+      "mask": [[3, 0], [4, 0]],
+      "weeds": []
+    },
+    {
+      "id": 7,
+      "name": "Вредители на грядках",
+      "moves": 26,
+      "colors": [0, 1, 2, 3, 4, 5],
+      "goals": [
+        {
+          "type": "weeds",
+          "colors": [],
+          "target": 9
+        },
+        {
+          "type": "collect",
+          "colors": [3],
+          "target": 12
+        }
+      ],
+      "stars": {
+        "two": 6,
+        "three": 10,
+        "extra": {
+          "type": "specials_created",
+          "target": 2,
+          "text": "Создать 2 усилителя"
+        }
+      },
+      "reward": {
+        "coins": 220,
+        "helpers": {
+          "hedgehog": 1
+        },
+        "three_star": {
+          "bee": 1
+        }
+      },
+      "tip": "Сорняки исчезают, если собрать совпадение рядом с ними или задеть их усилителем.",
+      "mask": [],
+      "weeds": [[1, 2], [6, 2], [3, 3], [4, 3], [1, 5], [6, 5], [3, 5], [4, 5], [2, 6]]
+    },
+    {
+      "id": 8,
+      "name": "Большой урожай",
+      "moves": 28,
+      "colors": [0, 1, 2, 3, 4, 5],
+      "goals": [
+        {
+          "type": "collect",
+          "colors": [1],
+          "target": 12
+        },
+        {
+          "type": "collect",
+          "colors": [3],
+          "target": 12
+        },
+        {
+          "type": "collect",
+          "colors": [2],
+          "target": 12
+        }
+      ],
+      "stars": {
+        "two": 7,
+        "three": 11,
+        "extra": {
+          "type": "cascade",
+          "target": 3,
+          "text": "Цепочка из 3 волн за один ход"
+        }
+      },
+      "reward": {
+        "coins": 250,
+        "helpers": {
+
+        },
+        "three_star": {
+          "hedgehog": 1
+        }
+      },
+      "tip": "Три цели сразу! Планируй ходы так, чтобы собирать сразу несколько нужных плодов.",
+      "mask": [[0, 3], [0, 4], [7, 3], [7, 4]],
+      "weeds": []
+    },
+    {
+      "id": 9,
+      "name": "Спасение сада",
+      "moves": 28,
+      "colors": [0, 1, 2, 3, 4],
+      "goals": [
+        {
+          "type": "weeds",
+          "colors": [],
+          "target": 12
+        },
+        {
+          "type": "rockets",
+          "colors": [],
+          "target": 2
+        },
+        {
+          "type": "collect",
+          "colors": [0, 4],
+          "target": 15
+        }
+      ],
+      "stars": {
+        "two": 7,
+        "three": 11,
+        "extra": {
+          "type": "no_helpers",
+          "target": 0,
+          "text": "Пройти без помощников"
+        }
+      },
+      "reward": {
+        "coins": 280,
+        "helpers": {
+          "bee": 1
+        },
+        "three_star": {
+          "squirrel": 1
+        }
+      },
+      "tip": "Ракеты пролетают через всё поле и выпалывают сорняки на своём пути!",
+      "mask": [],
+      "weeds": [[0, 6], [1, 6], [6, 6], [7, 6], [0, 7], [1, 7], [6, 7], [7, 7], [3, 4], [4, 4], [3, 5], [4, 5]]
+    },
+    {
+      "id": 10,
+      "name": "Фестиваль урожая",
+      "moves": 32,
+      "colors": [0, 1, 2, 4, 5],
+      "goals": [
+        {
+          "type": "collect",
+          "colors": [0],
+          "target": 7
+        },
+        {
+          "type": "collect",
+          "colors": [1],
+          "target": 6
+        },
+        {
+          "type": "collect",
+          "colors": [4],
+          "target": 6
+        },
+        {
+          "type": "collect",
+          "colors": [5],
+          "target": 6
+        },
+        {
+          "type": "weeds",
+          "colors": [],
+          "target": 12
+        },
+        {
+          "type": "rainbow",
+          "colors": [],
+          "target": 1
+        }
+      ],
+      "stars": {
+        "two": 8,
+        "three": 12,
+        "extra": {
+          "type": "booster_combo",
+          "target": 1,
+          "text": "Поменять местами два усилителя"
+        }
+      },
+      "reward": {
+        "coins": 500,
+        "helpers": {
+
+        },
+        "three_star": {
+          "rooster": 1,
+          "squirrel": 1,
+          "hedgehog": 1,
+          "bee": 1
+        },
+        "unlock": "festival"
+      },
+      "tip": "Финальный экзамен! Собери 25 фруктов, выполи сорняки и создай радужную ягоду.",
+      "mask": [[0, 0], [7, 0]],
+      "weeds": [[2, 2, 2], [5, 2, 2], [1, 4], [6, 4], [3, 3, 2], [4, 3, 2], [2, 6], [5, 6], [3, 6, 2], [4, 6, 2], [0, 7], [7, 7]]
+    }
+  ]
+}

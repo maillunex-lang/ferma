@@ -1,0 +1,10 @@
+{
+  "max_charges": 99,
+  "products": [
+    {"id": "pack_rooster", "title": "Петя-Петушок", "icon": "res://assets/helpers/rooster.png", "grant": {"rooster": 3}, "price_rub": 29, "description": "3 заряда Пети-Петушка"},
+    {"id": "pack_squirrel", "title": "Белка Рыжуля", "icon": "res://assets/helpers/squirrel.png", "grant": {"squirrel": 3}, "price_rub": 39, "description": "3 заряда Белки Рыжули"},
+    {"id": "pack_hedgehog", "title": "Ёжик Колючка", "icon": "res://assets/helpers/hedgehog.png", "grant": {"hedgehog": 3}, "price_rub": 49, "description": "3 заряда Ёжика Колючки"},
+    {"id": "pack_bee", "title": "Пчёлка Жужа", "icon": "res://assets/helpers/bee.png", "grant": {"bee": 3}, "price_rub": 59, "description": "3 заряда Пчёлки Жужи"},
+    {"id": "pack_bundle", "title": "Набор помощников", "icon": "", "grant": {"rooster": 2, "squirrel": 2, "hedgehog": 2, "bee": 2}, "price_rub": 99, "description": "По 2 заряда каждого помощника"}
+  ]
+}

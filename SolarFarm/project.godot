@@ -1,0 +1,65 @@
+; Engine configuration file.
+; Солнечная ферма — Godot 4.4.1-stable, GDScript, GL Compatibility renderer.
+
+config_version=5
+
+[application]
+
+config/name="Солнечная ферма"
+config/description="Офлайн-игра: ферма + головоломки «три в ряд» с редкими помощниками."
+config/version="1.0.0"
+run/main_scene="res://scenes/MainMenu.tscn"
+config/features=PackedStringArray("4.4", "GL Compatibility")
+boot_splash/bg_color=Color(1, 0.84, 0.36, 1)
+boot_splash/image="res://assets/ui/splash.png"
+boot_splash/fullsize=false
+config/icon="res://assets/ui/app_icon.png"
+
+[autoload]
+
+SaveManager="*res://scripts/autoload/save_manager.gd"
+AudioManager="*res://scripts/autoload/audio_manager.gd"
+EconomyManager="*res://scripts/autoload/economy_manager.gd"
+HelperManager="*res://scripts/autoload/helper_manager.gd"
+AchievementManager="*res://scripts/autoload/achievement_manager.gd"
+FarmProgression="*res://scripts/autoload/farm_progression.gd"
+LevelManager="*res://scripts/autoload/level_manager.gd"
+GameManager="*res://scripts/autoload/game_manager.gd"
+
+[display]
+
+window/size/viewport_width=720
+window/size/viewport_height=1280
+window/size/window_width_override=450
+window/size/window_height_override=800
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=1
+
+[gui]
+
+theme/custom_font="res://assets/fonts/Nunito-ExtraBold.ttf"
+common/drop_mouse_on_gui_input_disabled=true
+
+[importer_defaults]
+
+texture={
+"mipmaps/generate": true,
+"process/fix_alpha_border": true
+}
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
+[physics]
+
+common/physics_ticks_per_second=30
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=3
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.49, 0.78, 0.31, 1)

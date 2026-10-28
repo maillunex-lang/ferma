@@ -1,0 +1,49 @@
+{
+  "order": ["rooster", "squirrel", "hedgehog", "bee"],
+  "helpers": {
+    "rooster": {
+      "name": "Петя-Петушок",
+      "short": "Петя",
+      "description": "Склёвывает до пяти случайных обычных элементов на поле.",
+      "icon": "res://assets/helpers/rooster.png",
+      "color": "#ff8a3d",
+      "start": 2,
+      "target": "none",
+      "sfx": "helper_rooster",
+      "cost": 1
+    },
+    "squirrel": {
+      "name": "Белка Рыжуля",
+      "short": "Рыжуля",
+      "description": "Забирает выбранный тобой элемент с поля.",
+      "icon": "res://assets/helpers/squirrel.png",
+      "color": "#f2643a",
+      "start": 2,
+      "target": "cell",
+      "sfx": "helper_squirrel",
+      "cost": 1
+    },
+    "hedgehog": {
+      "name": "Ёжик Колючка",
+      "short": "Колючка",
+      "description": "Устраивает взрыв в области 3×3 вокруг выбранной клетки.",
+      "icon": "res://assets/helpers/hedgehog.png",
+      "color": "#a8743f",
+      "start": 1,
+      "target": "cell",
+      "sfx": "helper_hedgehog",
+      "cost": 1
+    },
+    "bee": {
+      "name": "Пчёлка Жужа",
+      "short": "Жужа",
+      "description": "Добавляет три дополнительных хода.",
+      "icon": "res://assets/helpers/bee.png",
+      "color": "#f2b20c",
+      "start": 1,
+      "target": "none",
+      "sfx": "helper_bee",
+      "cost": 1
+    }
+  }
+}

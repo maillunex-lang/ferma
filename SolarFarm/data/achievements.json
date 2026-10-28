@@ -1,0 +1,14 @@
+{
+  "tasks": [
+    {"id": "first_match", "title": "Первое совпадение", "text": "Собери три одинаковых элемента в ряд", "event": "match", "target": 1, "reward": {"helpers": {"rooster": 1}}},
+    {"id": "first_level", "title": "Первый урожай", "text": "Пройди первый уровень", "event": "level_won", "target": 1, "reward": {"coins": 50}},
+    {"id": "first_rocket", "title": "Ракетчик", "text": "Создай ракету из четырёх элементов", "event": "rocket_created", "target": 1, "reward": {"helpers": {"squirrel": 1}}},
+    {"id": "first_upgrade", "title": "Хозяин фермы", "text": "Улучши любую постройку на ферме", "event": "farm_upgrade", "target": 1, "reward": {"helpers": {"bee": 1}}},
+    {"id": "use_helper", "title": "Дружная команда", "text": "Используй любого помощника в головоломке", "event": "helper_used", "target": 1, "reward": {"helpers": {"hedgehog": 1}}},
+    {"id": "first_basket", "title": "Полная корзина", "text": "Создай корзину совпадением буквой Т или Г", "event": "basket_created", "target": 1, "reward": {"coins": 80}},
+    {"id": "first_rainbow", "title": "Радуга", "text": "Создай радужную ягоду из пяти элементов", "event": "rainbow_created", "target": 1, "reward": {"helpers": {"rooster": 1, "hedgehog": 1}}},
+    {"id": "stars_10", "title": "Звездочёт", "text": "Собери 10 звёзд на уровнях", "event": "stars_total", "target": 10, "reward": {"helpers": {"squirrel": 1, "bee": 1}}},
+    {"id": "farm_5", "title": "Золотые руки", "text": "Сделай 5 улучшений фермы", "event": "farm_upgrade", "target": 5, "reward": {"coins": 150}},
+    {"id": "all_levels", "title": "Фестиваль урожая", "text": "Пройди все 10 уровней", "event": "levels_completed", "target": 10, "reward": {"helpers": {"rooster": 1, "squirrel": 1, "hedgehog": 1, "bee": 1}}}
+  ]
+}

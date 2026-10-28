@@ -1,0 +1,14 @@
+# Godot cache / generated
+.godot/
+*.import.tmp
+SolarFarm/.godot/
+SolarFarm/export/
+SolarFarm/build/
+*.apk
+*.aab
+*.idsig
+*.keystore
+*.jks
+# OS / editor
+.DS_Store
+*.swp
