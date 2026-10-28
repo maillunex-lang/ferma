@@ -124,3 +124,26 @@ func test_back_button() -> void:
 	gm.close_dialog()
 	c.finished = true
 	await _goto("menu")
+
+
+func test_app_pause_saves_and_pauses_puzzle() -> void:
+	fresh_profile()
+	var gm := autoload("GameManager")
+	var sm := autoload("SaveManager")
+	gm.close_dialog()
+	autoload("LevelManager").current_level_id = 2
+	var c: Node = await _goto("puzzle")
+	gm.close_dialog()
+	c.busy = false
+	if FileAccess.file_exists(sm.save_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(sm.save_path))
+	sm.data.coins = 4321
+	gm._notification(Node.NOTIFICATION_APPLICATION_PAUSED)
+	await _wait(2)
+	check(FileAccess.file_exists(sm.save_path), "progress written when the app goes to background")
+	check(gm.has_dialog(), "puzzle paused when the app goes to background")
+	sm.load_game()
+	eq(int(sm.data.coins), 4321, "saved state survives")
+	gm.close_dialog()
+	c.finished = true
+	await _goto("menu")

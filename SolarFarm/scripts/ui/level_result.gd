@@ -135,6 +135,7 @@ func _ready() -> void:
 	row.add_child(farm)
 	card.pivot_offset = Vector2(310, 400)
 	UIKit.pop_in(card)
+	_helper_reaction(card)
 
 	if res.won:
 		AudioManager.play_music("menu")
@@ -177,6 +178,28 @@ func _coin_shower(n: int) -> void:
 		t.tween_property(c, "position:y", get_viewport_rect().size.y + 80, randf_range(1.1, 1.8)).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		t.parallel().tween_property(c, "rotation", randf_range(-6, 6), 1.6)
 		t.tween_callback(c.queue_free)
+
+
+## A helper friend cheers (win) or comforts the player (loss).
+func _helper_reaction(card: Control) -> void:
+	var order: Array = HelperManager.order
+	var h: String = order[int(res.level_id) % order.size()]
+	var img := UIKit.icon(HelperManager.icon(h), 170)
+	img.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(img)
+	await get_tree().process_frame
+	img.position = card.global_position + Vector2(card.size.x - 150, -120)
+	img.pivot_offset = Vector2(85, 170)
+	var t := img.create_tween().set_loops()
+	if res.won:
+		t.tween_property(img, "position:y", img.position.y - 34, 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		t.tween_property(img, "position:y", img.position.y, 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		t.tween_interval(0.35)
+		AudioManager.play(HelperManager.defs[h].sfx)
+	else:
+		img.modulate = Color(0.92, 0.92, 1.0)
+		t.tween_property(img, "rotation", 0.12, 0.9).set_trans(Tween.TRANS_SINE)
+		t.tween_property(img, "rotation", -0.12, 0.9).set_trans(Tween.TRANS_SINE)
 
 
 func _sunburst() -> void:

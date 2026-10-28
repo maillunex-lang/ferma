@@ -38,7 +38,6 @@ window/handheld/orientation=1
 
 [gui]
 
-theme/custom_font="res://assets/fonts/Nunito-ExtraBold.ttf"
 common/drop_mouse_on_gui_input_disabled=true
 
 [importer_defaults]
